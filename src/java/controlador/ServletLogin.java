@@ -46,7 +46,7 @@ public class ServletLogin extends HttpServlet {
             //VALIDAMOS EL USUARIO
 
             //VALIDAMOS EL TIPO DE USUARIO
-            usuarioFacade.find(usuario);
+            usuarioFacade.find(1);
             if (usuario.getTipoUsuario().getDescripcion().equals("Administrador")) {
 
                 //  REDIRECCION
