@@ -39,9 +39,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     }
     
     public boolean actualizarEquipo (Usuario e){
-        Query query = em.createQuery("UPDATE equipo FROM Usuario u WHERE u.user = :user and u.pass = :pass");
+        Query query = em.createQuery("UPDATE Usuario u SET u.equipo = :equipo WHERE u.id = :id");
         
-        return query.getResultList().size() > 0;
+        query.setParameter("equipo", e.getEquipo());
+        query.setParameter("id", e.getId());
+        query.executeUpdate();
+        return true;
     }
     public Usuario buscarUsuario(String user, String pass){
         Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.user = :user and u.pass = :pass");
