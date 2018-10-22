@@ -89,8 +89,36 @@ public class Usuario implements Serializable {
         this.pass = pass;
         this.vigente = vigente;
     }
+
+    public Usuario(String user, String pass) {
+        this.user = user;
+        this.pass = pass;
+    }
     
-      public Usuario(String user, String pass) {
+    public Usuario(Integer id, Equipo equipo) {
+        this.id = id;
+        this.equipo = equipo;
+    }
+    
+    public Usuario(Integer id, boolean vigente) {
+        this.id = id;
+        this.vigente = vigente;
+    }
+    
+    public Usuario(Equipo equipo, TipoUsuario tipoUsuario, String nombre, int edad, String user, String pass, boolean vigente) {
+        this.equipo = equipo;
+        this.tipoUsuario = tipoUsuario;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.user = user;
+        this.pass = pass;
+        this.vigente = vigente;
+    }
+
+    public Usuario(Integer id, String nombre, int edad, String user, String pass) {
+        this.id = id;
+        this.nombre = nombre;
+        this.edad = edad;
         this.user = user;
         this.pass = pass;
     }
@@ -183,5 +211,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "modelo.dto.Usuario[ id=" + id + " ]";
     }
-    
+
 }

@@ -80,6 +80,19 @@ public class Jugadores implements Serializable {
         this.nick = nick;
         this.vigente = vigente;
     }
+    
+    public Jugadores(Integer id, boolean vigente) {
+        this.id = id;
+        this.vigente = vigente;
+    }
+    
+    public Jugadores(Equipo equipo, String nombre, String apellido, String nick, boolean vigente) {
+       this.equipo = equipo;
+       this.nombre = nombre;
+       this.apellido = apellido;
+       this.nick = nick;
+       this.vigente = vigente;
+    }
 
     public Integer getId() {
         return id;

@@ -36,40 +36,42 @@ public class ServletLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+           
             //RECIBIMOS LOS PARARMETROS DEL FORMULARIO
             String user = request.getParameter("txtUser");
             String pass = request.getParameter("txtPass");
 
             //VALIDAR EN EL DTO
             Usuario usuario = new Usuario(user, pass);
+          
             //VALIDAMOS EL USUARIO
+            Usuario usu = usuarioFacade.buscarUsuario(user, pass);
+         
 
             //VALIDAMOS EL TIPO DE USUARIO
-            usuarioFacade.find(1);
-            if (usuario.getTipoUsuario().getDescripcion().equals("Administrador")) {
-
-                //  REDIRECCION
+            if (usu.getTipoUsuario().getDescripcion().equals("Administrador")) {
+                //REDIRECCION
                 request.getSession().setAttribute("user", usuario.getUser());
-                request.getSession().setAttribute("usuario", usuario.getNombre());
-                request.getSession().setAttribute("tipo", usuario.getTipoUsuario().getId());
-                //request.getSession().setAttribute("vigente", usuario.isVigente());
-
+                request.getSession().setAttribute("usuario", usu.getNombre());
+                request.getSession().setAttribute("tipo", usu.getTipoUsuario().getId());
+                request.getSession().setAttribute("vigente", usu.getVigente());
                 response.sendRedirect("administrador/indexAdm.jsp");
-            } else if (usuario.getTipoUsuario().getDescripcion().equals("SuperUsuario")) {
+                
+            } else if (usu.getTipoUsuario().getDescripcion().equals("SuperUsuario")) {
                 request.getSession().setAttribute("user", usuario.getUser());
-                request.getSession().setAttribute("usuario", usuario.getNombre());
-                request.getSession().setAttribute("tipo", usuario.getTipoUsuario().getId());
-                //request.getSession().setAttribute("vigente", usuario.isVigente());
+                request.getSession().setAttribute("usuario", usu.getNombre());
+                request.getSession().setAttribute("tipo", usu.getTipoUsuario().getId());
+                request.getSession().setAttribute("vigente", usu.getVigente());
                 response.sendRedirect("superusuario/indexSup.jsp");
-            } else if (usuario.getTipoUsuario().getDescripcion().equals("Equipo")) {
-                request.getSession().setAttribute("id", usuario.getId());
+                
+            } else if (usu.getTipoUsuario().getDescripcion().equals("Equipo")) {
+                request.getSession().setAttribute("id", usu.getId());
                 request.getSession().setAttribute("user", usuario.getUser());
-                request.getSession().setAttribute("usuario", usuario.getNombre());
-                request.getSession().setAttribute("tipo", usuario.getTipoUsuario().getId());
-                //request.getSession().setAttribute("vigente", usuario.isVigente());
-                request.getSession().setAttribute("equipo", usuario.getEquipo().getId());
-                request.getSession().setAttribute("nomEquipo", usuario.getEquipo().getNombreEquipo());
+                request.getSession().setAttribute("usuario", usu.getNombre());
+                request.getSession().setAttribute("tipo", usu.getTipoUsuario().getId());
+                request.getSession().setAttribute("vigente", usu.getVigente());
+                request.getSession().setAttribute("equipo", usu.getEquipo().getId());
+                request.getSession().setAttribute("nomEquipo", usu.getEquipo().getNombreEquipo());
                 response.sendRedirect("equipo/indexEqu.jsp");
             }
         } catch (Exception e) {

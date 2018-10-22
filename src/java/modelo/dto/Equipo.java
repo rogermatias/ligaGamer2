@@ -90,6 +90,14 @@ public class Equipo implements Serializable {
         this.numeroIntegrantes = numeroIntegrantes;
         this.vigente = vigente;
     }
+    
+    public Equipo(Clasificacion clasificacion, TipoLiga tipoLiga, String nombreEquipo, int numeroIntegrantes, boolean vigente) {
+        this.clasificacion = clasificacion;
+        this.tipoLiga = tipoLiga;
+        this.nombreEquipo = nombreEquipo;
+        this.numeroIntegrantes = numeroIntegrantes;
+        this.vigente = vigente;
+    }
 
     public Integer getId() {
         return id;

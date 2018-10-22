@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import modelo.dao.UsuarioFacade;
 import modelo.dto.Equipo;
 import modelo.dto.TipoUsuario;
@@ -20,9 +19,9 @@ import modelo.dto.Usuario;
 
 /**
  *
- * @author Duoc
+ * @author franco
  */
-public class ServletAdministrador extends HttpServlet {
+public class ServletUsuario extends HttpServlet {
 
     @EJB
     private UsuarioFacade usuarioFacade;
@@ -38,9 +37,10 @@ public class ServletAdministrador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        //Recubumos el boton del formulario
         String opcion = request.getParameter("btnAccion");
         //Cual accion se ejecuta
+
         if (opcion.equals("Agregar")) {
             agregar(request, response);
         }
@@ -52,7 +52,6 @@ public class ServletAdministrador extends HttpServlet {
         if (opcion.equals("Bajar")) {
             darBaja(request, response);
         }
-        
     }
     
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
@@ -64,10 +63,10 @@ public class ServletAdministrador extends HttpServlet {
             String user = request.getParameter("txtUser");
             String pass = request.getParameter("txtPass");
             Equipo equipo = new Equipo(1);
-            TipoUsuario tipoUsuario = new TipoUsuario(3);
+            TipoUsuario tipoUsuario = new TipoUsuario(1);
 
             if (usuarioFacade.existeUsuario(user)) {
-                request.getSession().setAttribute("msjNO", "Usuario ya existe con ese nombre");
+                request.getSession().setAttribute("msjNO", "El Usuario ya existe");
             } else {
                 Usuario usu = new Usuario(equipo, tipoUsuario, nombre, edad, user, pass, true);
                 usuarioFacade.create(usu);
@@ -76,22 +75,13 @@ public class ServletAdministrador extends HttpServlet {
         } catch (Exception e) {
             request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
         } finally {
-            HttpSession se = request.getSession();
-            int a = (int) se.getAttribute("tipo");
-            if (a == 1) {
-                response.sendRedirect("administrador/agregarUsuEqu.jsp");
-            } else if (a == 2) {
-                response.sendRedirect("superusuario/agregarUsuEqu.jsp");
-            } else {
-                response.sendRedirect("registro.jsp");
-            }
+            response.sendRedirect("superusuario/agregarAdm.jsp");
         }
     }
 
     protected void modificar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
             //Recibimos el formulario
             int id = Integer.parseInt(request.getParameter("txtID"));
             String nombre = request.getParameter("txtNombre");
@@ -99,27 +89,17 @@ public class ServletAdministrador extends HttpServlet {
             String user = request.getParameter("txtUser");
             String pass = request.getParameter("txtPass");
 
-            //Validamos a nivel de modelo(DTO)
             Usuario usu = new Usuario(id, nombre, edad, user, pass);
-            // LLamamos al dao que tiene los metodos
-
-            //Actualizamos el alumno en la DB
             if (usuarioFacade.modificarAdmin(usu)) {
                 request.getSession().setAttribute("msjOK", "Usuario Modificado");
-            } else {
-                //Variable de session(nombre de la variable,contenido)
-                request.getSession().setAttribute("msjNO", "Usuario NO pudo ser Modificado");
+            }else{
+                request.getSession().setAttribute("msjOK", "Usuario no pudo ser Modificado");
             }
+
         } catch (Exception e) {
             request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
         } finally {
-            HttpSession se = request.getSession();
-            int a = (int) se.getAttribute("tipo");
-            if (a == 1) {
-                response.sendRedirect("administrador/modificarEqu.jsp");
-            } else {
-                response.sendRedirect("superusuario/modificarEqu.jsp");
-            }
+            response.sendRedirect("superusuario/modificarAdm.jsp");
         }
     }
 
@@ -129,7 +109,7 @@ public class ServletAdministrador extends HttpServlet {
             //Recibimos el formulario
             int id = Integer.parseInt(request.getParameter("txtID"));
             boolean vigente = Boolean.valueOf(request.getParameter("vigente"));
-            //Validamos a nivel de modelo(DTO)
+          
             Usuario usu = new Usuario(id, vigente);
             if (usuarioFacade.darBaja(usu)) {
                 request.getSession().setAttribute("msjOK", "Usuario Modificado");
@@ -139,17 +119,9 @@ public class ServletAdministrador extends HttpServlet {
         } catch (Exception e) {
             request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
         } finally {
-            HttpSession se = request.getSession();
-            int a = (int) se.getAttribute("tipo");
-            if (a == 1) {
-                response.sendRedirect("administrador/darBajaEqu.jsp");
-            } else {
-                response.sendRedirect("superusuario/darBajaEqu.jsp");
-            }
+            response.sendRedirect("superusuario/darBajaAdm.jsp");
         }
     }
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

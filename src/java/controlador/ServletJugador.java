@@ -13,19 +13,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.dao.UsuarioFacade;
+import modelo.dao.EquipoFacade;
+import modelo.dao.JugadoresFacade;
 import modelo.dto.Equipo;
-import modelo.dto.TipoUsuario;
-import modelo.dto.Usuario;
+import modelo.dto.Jugadores;
 
 /**
  *
- * @author Duoc
+ * @author franco
  */
-public class ServletAdministrador extends HttpServlet {
+public class ServletJugador extends HttpServlet {
 
     @EJB
-    private UsuarioFacade usuarioFacade;
+    private EquipoFacade equipoFacade;
+
+    @EJB
+    private JugadoresFacade jugadoresFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,21 +41,15 @@ public class ServletAdministrador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String opcion = request.getParameter("btnAccion");
-        //Cual accion se ejecuta
+         String opcion = request.getParameter("btnAccion");
+         
         if (opcion.equals("Agregar")) {
             agregar(request, response);
         }
-
-        if (opcion.equals("Modificar")) {
-            modificar(request, response);
-        }
-
+        
         if (opcion.equals("Bajar")) {
             darBaja(request, response);
         }
-        
     }
     
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
@@ -60,55 +57,23 @@ public class ServletAdministrador extends HttpServlet {
         try {
             //Recibimos el formulario
             String nombre = request.getParameter("txtNombre");
-            int edad = Integer.parseInt(request.getParameter("txtEdad"));
-            String user = request.getParameter("txtUser");
-            String pass = request.getParameter("txtPass");
-            Equipo equipo = new Equipo(1);
-            TipoUsuario tipoUsuario = new TipoUsuario(3);
+            String apellido = request.getParameter("txtApellido");
+            String nickname = request.getParameter("txtNickname");
+            int equ = Integer.parseInt(request.getParameter("txtEquipo"));
+            Equipo equipo = new Equipo(equ);
 
-            if (usuarioFacade.existeUsuario(user)) {
-                request.getSession().setAttribute("msjNO", "Usuario ya existe con ese nombre");
-            } else {
-                Usuario usu = new Usuario(equipo, tipoUsuario, nombre, edad, user, pass, true);
-                usuarioFacade.create(usu);
-                request.getSession().setAttribute("msjOK", "Usuario Agregado");
-            }
-        } catch (Exception e) {
-            request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
-        } finally {
-            HttpSession se = request.getSession();
-            int a = (int) se.getAttribute("tipo");
-            if (a == 1) {
-                response.sendRedirect("administrador/agregarUsuEqu.jsp");
-            } else if (a == 2) {
-                response.sendRedirect("superusuario/agregarUsuEqu.jsp");
-            } else {
-                response.sendRedirect("registro.jsp");
-            }
-        }
-    }
-
-    protected void modificar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-
-            //Recibimos el formulario
-            int id = Integer.parseInt(request.getParameter("txtID"));
-            String nombre = request.getParameter("txtNombre");
-            int edad = Integer.parseInt(request.getParameter("txtEdad"));
-            String user = request.getParameter("txtUser");
-            String pass = request.getParameter("txtPass");
-
-            //Validamos a nivel de modelo(DTO)
-            Usuario usu = new Usuario(id, nombre, edad, user, pass);
-            // LLamamos al dao que tiene los metodos
-
-            //Actualizamos el alumno en la DB
-            if (usuarioFacade.modificarAdmin(usu)) {
-                request.getSession().setAttribute("msjOK", "Usuario Modificado");
-            } else {
+            if (jugadoresFacade.existeJugador(nickname)) {
                 //Variable de session(nombre de la variable,contenido)
-                request.getSession().setAttribute("msjNO", "Usuario NO pudo ser Modificado");
+                request.getSession().setAttribute("msjNO", "Jugador ya existe con este nick");
+            } else {
+                Jugadores jugador = new Jugadores(equipo, nombre, apellido, nickname, true);
+                jugadoresFacade.create(jugador);
+
+                Equipo equipoModi = new Equipo(equ);
+                if (equipoFacade.actualizarIntegrantes(equipoModi)) {
+                    //Variable de session(nombre de la variable,contenido)
+                    request.getSession().setAttribute("msjOK", "Jugador Inscrito");
+                }
             }
         } catch (Exception e) {
             request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
@@ -116,9 +81,11 @@ public class ServletAdministrador extends HttpServlet {
             HttpSession se = request.getSession();
             int a = (int) se.getAttribute("tipo");
             if (a == 1) {
-                response.sendRedirect("administrador/modificarEqu.jsp");
+                response.sendRedirect("administrador/agregarJug.jsp");
+            } else if (a == 2) {
+                response.sendRedirect("superusuario/agregarJug.jsp");
             } else {
-                response.sendRedirect("superusuario/modificarEqu.jsp");
+                response.sendRedirect("equipo/agregarJug.jsp");
             }
         }
     }
@@ -130,11 +97,14 @@ public class ServletAdministrador extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("txtID"));
             boolean vigente = Boolean.valueOf(request.getParameter("vigente"));
             //Validamos a nivel de modelo(DTO)
-            Usuario usu = new Usuario(id, vigente);
-            if (usuarioFacade.darBaja(usu)) {
-                request.getSession().setAttribute("msjOK", "Usuario Modificado");
+            Jugadores jug = new Jugadores(id, vigente);
+
+            if (jugadoresFacade.darBaja(jug)) {
+
+                request.getSession().setAttribute("msjOK", "Jugador Modificado");
             } else {
-                request.getSession().setAttribute("msjNO", "Usuario NO pudo ser Modificado");
+
+                request.getSession().setAttribute("msjNO", "Jugador NO pudo ser Modificado");
             }
         } catch (Exception e) {
             request.getSession().setAttribute("msjNO", "Error " + e.getMessage());
@@ -142,14 +112,14 @@ public class ServletAdministrador extends HttpServlet {
             HttpSession se = request.getSession();
             int a = (int) se.getAttribute("tipo");
             if (a == 1) {
-                response.sendRedirect("administrador/darBajaEqu.jsp");
+                response.sendRedirect("administrador/darBajaJug.jsp");
+            } else if (a == 2) {
+                response.sendRedirect("superusuario/darBajaJug.jsp");
             } else {
-                response.sendRedirect("superusuario/darBajaEqu.jsp");
+                response.sendRedirect("equipo/darBajaJug.jsp");
             }
         }
     }
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
