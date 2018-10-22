@@ -20,7 +20,6 @@
     <body>
         <jsp:include page="menu.jsp"/>
         <div class="container">
-            <h1></h1>
             <div class="row">
                 <div class="col-sm-3">
 

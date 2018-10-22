@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="footer">
-            <p>&COPY;  Creado por el roger &REG;</p>
+            <p>&COPY;  Creado por los cabros entero choro &REG;</p>
         </div>
         </div>
         

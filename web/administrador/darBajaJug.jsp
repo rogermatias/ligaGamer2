@@ -1,8 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%-- 
-    Document   : darBajaEqu
-    Created on : 06-09-2018, 16:30:11
+    Document   : darBajaJug
+    Created on : 10-09-2018, 18:17:59
     Author     : franc
 --%>
 
@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Dar de baja a un equipo</title>
+        <title>Dar de baja a un jugador</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
@@ -37,12 +37,12 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <h1>Dar de Baja el usuario del equipo</h1>
-                            <form action="../procesoAdministrador" method="GET">
+                            <h1>Dar de Baja a un Jugador</h1>
+                            <form action="../procesoJugador" method="GET">
                                 <div class="form-group">
                                     <sql:setDataSource var="dataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/liga?zeroDateTimeBehavior=convertToNull" user="root" password=""></sql:setDataSource>
                                     <sql:query var="usuario" dataSource="${dataSource}">
-                                        SELECT u.nombre, u.id, e.nombre_equipo FROM usuario u INNER JOIN equipo e ON u.equipo = e.id WHERE u.tipo_usuario=3
+                                        SELECT j.nombre, j.id, j.equipo, e.nombre_equipo FROM jugadores j INNER JOIN equipo e ON j.equipo = e.id 
                                     </sql:query>
                                     <label>Usuario</label>
                                     <select name="txtID" id="cboEmpleados" class="form-control">

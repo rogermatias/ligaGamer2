@@ -8,6 +8,30 @@
         <servlet-name>ServletLogin</servlet-name>
         <servlet-class>controlador.ServletLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletCerrarSession</servlet-name>
+        <servlet-class>controlador.ServletCerrarSession</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletEquipo</servlet-name>
+        <servlet-class>controlador.ServletEquipo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletJugador</servlet-name>
+        <servlet-class>controlador.ServletJugador</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletListar</servlet-name>
+        <servlet-class>controlador.ServletListar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletListarUsuEqu</servlet-name>
+        <servlet-class>controlador.ServletListarUsuEqu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletUsuario</servlet-name>
+        <servlet-class>controlador.ServletUsuario</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServletAdministrador</servlet-name>
         <url-pattern>/procesoAdministrador</url-pattern>
@@ -15,6 +39,30 @@
     <servlet-mapping>
         <servlet-name>ServletLogin</servlet-name>
         <url-pattern>/procesoLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletCerrarSession</servlet-name>
+        <url-pattern>/procesoCerrarSession</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletEquipo</servlet-name>
+        <url-pattern>/procesoEquipo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletJugador</servlet-name>
+        <url-pattern>/procesoJugador</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletListar</servlet-name>
+        <url-pattern>/procesoListar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletListarUsuEqu</servlet-name>
+        <url-pattern>/procesoListarUsuEqu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletUsuario</servlet-name>
+        <url-pattern>/procesoUsuario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

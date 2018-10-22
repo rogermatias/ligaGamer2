@@ -15,32 +15,27 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="../css/super.css">
         <link href="../css/sesion.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/super.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/temporal.css" rel="stylesheet" type="text/css"/>
-        <script src="../js/tempo.js" type="text/javascript"></script>
     </head>
     <body>
-        
         <c:choose>
             <c:when test="${user == null}">
                 <div class="hola"></div>
-                    <div class="contenido">
-                <h1>Necesita Logearse</h1>
-                <a href="../index.jsp">Volver</a>
-                    </div>
-                
-               
+                <div class="contenido">
+                    <h1>Necesita Logearse</h1>
+                    <a href="../index.jsp">Volver</a>
+                </div>
             </c:when>
-            <c:when test="${user != null && tipo == 2}">
-                
+            <c:when test="${user != null && tipo == 2 && vigente == true}">
+                <jsp:include page="menu.jsp"/>
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-3">
-                            <jsp:include page="menu.jsp"/>
+
                         </div>
                         <div class="col-sm-6">
-                            <h1 style="color: #fff">Agregar Administrador</h1>
+                            <h1>Agregar Administrador</h1>
 
                             <form action="../procesoUsuario" method="GET">
                                 <div class="form-group">
@@ -63,17 +58,37 @@
                                     <input type="submit" name="btnAccion" value="Agregar" class="btn btn-success"/>
                                 </div>
                             </form>
+                            <c:if test="${msjOK != null}">
+                                <div class="alert alert-success">
+                                    <strong>Correcto!</strong> ${msjOK}.
+                                </div>
+                            </c:if>
+                            <c:if test="${msjNO != null}">
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> ${msjNO}.
+                                </div>
+                            </c:if>
                         </div>
                         <div class="col-sm-3">
-                            ${msjNO}
+
                         </div>
                     </div>
                 </div>
             </c:when>
             <c:when test="${tipo != 2}">
-                <h1>Tipo de usuario no admitido</h1>
+                <div class="hola"></div>
+                <div class="contenido">
+                    <h1>Tipo de Usuario no Admitido</h1>
+                    <a href="../index.jsp">Volver</a>
+                </div>
             </c:when>
-                
+            <c:when test="${vigente == false}">
+                <div class="hola"></div>
+                <div class="contenido">
+                    <h1>Usuario dado de baja</h1>
+                    <a href="../index.jsp">Volver</a>
+                </div>
+            </c:when>
             <c:otherwise>
             </c:otherwise>
         </c:choose>

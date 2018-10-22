@@ -33,11 +33,10 @@
                         <a href="https://www.facebook.com/LigaGamersZN?ref=br_rs">
                             <img src="img/icono facebook.png">
                         </a>
-                        <a href="https://www.instagram.com/laligagamer_oficial/">
+                        <a href="https://twitter.com/ligadegamer">
                             <img src="img/insta.png">
                         </a>
-                        <a href="https://twitter.com/ligadegamer">
-                        
+                        <a href="https://www.instagram.com/laligagamer_oficial/">
                             <img src="img/twitter.png">
                         </a>
                     </center>

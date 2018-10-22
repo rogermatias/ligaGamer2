@@ -1,8 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%-- 
-    Document   : darBajaEqu
-    Created on : 06-09-2018, 16:30:11
+    Document   : darBajaJug
+    Created on : 10-09-2018, 18:17:59
     Author     : franc
 --%>
 
@@ -11,13 +11,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Dar de baja a un equipo</title>
+        <title>Dar de baja a un jugador</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
-        <link href="../css/temporal.css" rel="stylesheet" type="text/css"/>
-        <script src="../js/tempo.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="../css/admin.css">
+        <link href="../css/equipo.css" rel="stylesheet" type="text/css"/>
         <link href="../css/sesion.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
@@ -29,7 +27,7 @@
                     <a href="../index.jsp">Volver</a>
                 </div>
             </c:when>
-            <c:when test="${user != null && tipo == 1 && vigente == true}">
+            <c:when test="${user != null && tipo == 3 && vigente == true}">
                 <jsp:include page="menu.jsp"/>
                 <div class="container">
                     <div class="row">
@@ -37,17 +35,17 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <h1>Dar de Baja el usuario del equipo</h1>
-                            <form action="../procesoAdministrador" method="GET">
+                            <h1>Dar de Baja a un Jugador</h1>
+                            <form action="../procesoJugador" method="GET">
                                 <div class="form-group">
                                     <sql:setDataSource var="dataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/liga?zeroDateTimeBehavior=convertToNull" user="root" password=""></sql:setDataSource>
                                     <sql:query var="usuario" dataSource="${dataSource}">
-                                        SELECT u.nombre, u.id, e.nombre_equipo FROM usuario u INNER JOIN equipo e ON u.equipo = e.id WHERE u.tipo_usuario=3
+                                        SELECT nombre, id FROM jugadores WHERE equipo = ${equipo}
                                     </sql:query>
                                     <label>Usuario</label>
                                     <select name="txtID" id="cboEmpleados" class="form-control">
                                         <c:forEach var="usu" items="${usuario.rows}">
-                                            <option value="${usu.id}">${usu.nombre} (${usu.nombre_equipo})</option>
+                                            <option value="${usu.id}">${usu.nombre} ${usu.apellido}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -78,7 +76,7 @@
                     </div>
                 </div>
             </c:when>
-            <c:when test="${tipo != 1}">
+            <c:when test="${tipo != 3}">
                 <div class="hola"></div>
                 <div class="contenido">
                     <h1>Tipo de Usuario no Admitido</h1>
